@@ -33,6 +33,11 @@
             <artifactId>jts2geojson</artifactId>
             <version>0.14.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.3.4</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>net.logstash.logback</groupId>-->
 <!--            <artifactId>logstash-logback-encoder</artifactId>-->
@@ -58,6 +63,13 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+<!--        引入项目-->
+        <dependency>
+            <groupId>com.southgis</groupId>
+            <artifactId>UserProj</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
