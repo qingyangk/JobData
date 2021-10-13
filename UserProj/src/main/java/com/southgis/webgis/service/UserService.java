@@ -1,11 +1,13 @@
 package com.southgis.webgis.service;
 
 import com.southgis.webgis.entity.User;
-import com.southgis.webgis.mapper.UserMapper;
-
-import javax.annotation.Resource;
+import com.southgis.webgis.Response.ResponseInfo;
 import java.io.Serializable;
 
+/**
+ * 用户信息——对数据库操作
+ * @author QingYang
+ */
 public interface UserService extends Serializable {
 
     /**
@@ -13,5 +15,5 @@ public interface UserService extends Serializable {
      * @param module
      * @return
      */
-    User saveUser(String module);
+    ResponseInfo saveUser(User module);
 }

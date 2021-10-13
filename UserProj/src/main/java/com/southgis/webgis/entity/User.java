@@ -13,6 +13,7 @@ public class User {
     public Integer id;
     public String username;
     public String password;
+    public String nick_name;
     public Integer age;
     public String sex;
     public String address;

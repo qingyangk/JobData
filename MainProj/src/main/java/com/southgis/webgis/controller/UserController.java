@@ -1,15 +1,29 @@
 package com.southgis.webgis.controller;
 
+import com.southgis.webgis.Response.ResponseInfo;
+import com.southgis.webgis.entity.User;
+import com.southgis.webgis.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
+    @Resource
+    UserService userService;
+
+    /**
+     * 保存用户信息
+     * @param module
+     * @return
+     */
     @PostMapping("/saveuser")
-    public String saveUser(){
-        return null;
+    public ResponseInfo saveUser(@RequestBody User module){
+        return userService.saveUser(module);
     }
 }
