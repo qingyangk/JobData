@@ -1,0 +1,18 @@
+#spring:
+#  datasource:
+##    阿里云
+##    type: com.alibaba.druid.pool.DruidDataSource
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://47.96.186.60:3306/spring?serverTimezone=UTC&useSSL=false&useUnicode=true&characterEncoding=UTF8&useSSL=false
+#    username: root
+#    password: 123456
+##    dbcp2:
+###      检测连接是否有效的sql
+##      validation-query: SELECT 1 FROM DUAL
+##      test-while-idle: true
+##      test-on-borrow: true
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    show-sql: true

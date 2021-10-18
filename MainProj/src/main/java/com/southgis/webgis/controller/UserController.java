@@ -26,4 +26,13 @@ public class UserController {
     public ResponseInfo saveUser(@RequestBody User module){
         return userService.saveUser(module);
     }
+
+    /**
+     * 查询用户信息，传入用户名和密码
+     * @param module
+     * @return
+     */
+    public ResponseInfo queryUser(@RequestBody User module){
+        return userService.queryUser(module);
+    }
 }

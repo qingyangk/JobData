@@ -16,4 +16,11 @@ public interface UserService extends Serializable {
      * @return
      */
     ResponseInfo saveUser(User module);
+
+    /**
+     * 查询用户信息
+     * @param module
+     * @return
+     */
+    ResponseInfo queryUser(User module);
 }
