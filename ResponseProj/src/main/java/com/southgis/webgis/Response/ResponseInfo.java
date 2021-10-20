@@ -22,10 +22,36 @@ public class ResponseInfo implements Serializable {
     public ResponseInfo(){
     }
 
+    public ResponseInfo(EnumErrCode enumErrCode) {
+        this.errCode = enumErrCode.getValue();
+        this.description = enumErrCode.getMessage();
+    }
+
+
+    public ResponseInfo(EnumErrCode enumErrCode, Object data) {
+        this.errCode = enumErrCode.getValue();
+        this.data = data;
+        this.description = enumErrCode.getMessage();
+    }
+
+
+    public ResponseInfo(EnumErrCode enumErrCode, String description) {
+        this.errCode = enumErrCode.getValue();
+        this.description = description == null || description.isEmpty() ? enumErrCode.getMessage() : description;
+    }
+
     public ResponseInfo(EnumErrCode enumErrCode, String description, Object data) {
         this.errCode = enumErrCode.getValue();
         this.description = description == null || description.isEmpty() ? enumErrCode.getMessage() : description;
         this.data = data;
+    }
+
+    /**
+     * 设置错误代码
+     * @param errCode
+     */
+    public void setErrCode(EnumErrCode errCode) {
+        this.errCode = errCode.getValue();
     }
 
     /**

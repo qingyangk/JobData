@@ -3,6 +3,7 @@ package com.southgis.webgis.serviceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.Response.entity.EnumErrCode;
+import com.southgis.webgis.entity.LoginInfo;
 import com.southgis.webgis.entity.User;
 import com.southgis.webgis.mapper.UserMapper;
 import com.southgis.webgis.service.UserService;
@@ -21,22 +22,32 @@ public class UserImpl implements UserService {
     @Resource
     UserMapper userMapper;
 
+    /**
+     * 保存用户信息
+     * @param module
+     * @return
+     */
     public ResponseInfo saveUser(User module) {
         userMapper.insert(module);
         return new ResponseInfo(EnumErrCode.OK, "用户信息入库成功", "");
     }
 
-    public ResponseInfo queryUser(User module) {
+    /**
+     * 查询是否存在账户
+     * @param loginInfo
+     * @return
+     */
+    public ResponseInfo queryUser(LoginInfo loginInfo) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("username", module.username);
+        queryWrapper.like("username", loginInfo.username);
         List<User> users = userMapper.selectList(queryWrapper);
         if (!users.isEmpty()) {
-            queryWrapper.like("password",module.password).lt("username",module.username);
-            List<User> userList = userMapper.selectList(queryWrapper);
-            if (!userList.isEmpty()){
-                return new ResponseInfo(EnumErrCode.OK,"账号密码正确");
-            }else {
-                return new ResponseInfo(EnumErrCode.BusinessError,"密码错误");
+            queryWrapper.like("password", loginInfo.password);//lt("username",loginInfo.username);
+            users = userMapper.selectList(queryWrapper);
+            if (!users.isEmpty()) {
+                return new ResponseInfo(EnumErrCode.OK, "账号密码正确", users);
+            } else {
+                return new ResponseInfo(EnumErrCode.BusinessError, "密码错误");
             }
         } else {
             return new ResponseInfo(EnumErrCode.BusinessError, "查询无记录");

@@ -1,5 +1,6 @@
 package com.southgis.webgis.service;
 
+import com.southgis.webgis.entity.LoginInfo;
 import com.southgis.webgis.entity.User;
 import com.southgis.webgis.Response.ResponseInfo;
 import java.io.Serializable;
@@ -19,8 +20,7 @@ public interface UserService extends Serializable {
 
     /**
      * 查询用户信息
-     * @param module
      * @return
      */
-    ResponseInfo queryUser(User module);
+    ResponseInfo queryUser(LoginInfo loginInfo);
 }

@@ -1,6 +1,7 @@
 package com.southgis.webgis.controller;
 
 import com.southgis.webgis.Response.ResponseInfo;
+import com.southgis.webgis.entity.LoginInfo;
 import com.southgis.webgis.entity.User;
 import com.southgis.webgis.service.UserService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,12 +28,13 @@ public class UserController {
         return userService.saveUser(module);
     }
 
-    /**
-     * 查询用户信息，传入用户名和密码
-     * @param module
+     /**
+     *查询用户信息，传入用户名和密码
+     * @param loginInfo
      * @return
      */
-    public ResponseInfo queryUser(@RequestBody User module){
-        return userService.queryUser(module);
+    @PostMapping("/queryuser")
+    public ResponseInfo queryUser(@RequestBody LoginInfo loginInfo){
+        return userService.queryUser(loginInfo);
     }
 }
