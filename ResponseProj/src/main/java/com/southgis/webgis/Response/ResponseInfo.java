@@ -5,6 +5,9 @@ import com.southgis.webgis.Response.entity.EnumErrCode;
 
 import java.io.Serializable;
 
+/**
+ * 返回信息实体
+ */
 public class ResponseInfo implements Serializable {
 
     @JsonProperty(value = "code")

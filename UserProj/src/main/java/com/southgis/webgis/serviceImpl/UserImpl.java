@@ -24,6 +24,7 @@ public class UserImpl implements UserService {
 
     /**
      * 保存用户信息
+     *
      * @param module
      * @return
      */
@@ -34,23 +35,29 @@ public class UserImpl implements UserService {
 
     /**
      * 查询是否存在账户
+     *
      * @param loginInfo
      * @return
      */
     public ResponseInfo queryUser(LoginInfo loginInfo) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("username", loginInfo.username);
-        List<User> users = userMapper.selectList(queryWrapper);
-        if (!users.isEmpty()) {
-            queryWrapper.like("password", loginInfo.password);//lt("username",loginInfo.username);
-            users = userMapper.selectList(queryWrapper);
+        try {
+            queryWrapper.like("username", loginInfo.username);
+            List<User> users = userMapper.selectList(queryWrapper);
             if (!users.isEmpty()) {
-                return new ResponseInfo(EnumErrCode.OK, "账号密码正确", users);
+                queryWrapper.like("password", loginInfo.password);//lt("username",loginInfo.username);
+                users = userMapper.selectList(queryWrapper);
+                if (!users.isEmpty()) {
+                    return new ResponseInfo(EnumErrCode.OK, "账号密码正确", users);
+                } else {
+                    return new ResponseInfo(EnumErrCode.BusinessError, "密码错误");
+                }
             } else {
-                return new ResponseInfo(EnumErrCode.BusinessError, "密码错误");
+                return new ResponseInfo(EnumErrCode.BusinessError, "查询无记录");
             }
-        } else {
-            return new ResponseInfo(EnumErrCode.BusinessError, "查询无记录");
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.BusinessError, ex.getMessage());
         }
     }
 }
