@@ -29,8 +29,21 @@ public class UserImpl implements UserService {
      * @return
      */
     public ResponseInfo saveUser(User module) {
-        userMapper.insert(module);
-        return new ResponseInfo(EnumErrCode.OK, "用户信息入库成功", "");
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        try {
+            queryWrapper.eq("username", module.username);
+            List<User> users = userMapper.selectList(queryWrapper);
+            //判断账号是否存在，存在则直接返回
+            if (!users.isEmpty()) {
+                return new ResponseInfo(EnumErrCode.BusinessError, "账号已存在");
+            } else {
+                userMapper.insert(module);
+                return new ResponseInfo(EnumErrCode.OK, "用户信息入库成功");
+            }
+        }catch (Exception ex){
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.BusinessError, ex.getMessage());
+        }
     }
 
     /**
@@ -41,11 +54,12 @@ public class UserImpl implements UserService {
      */
     public ResponseInfo queryUser(LoginInfo loginInfo) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+
         try {
-            queryWrapper.like("username", loginInfo.username);
+            queryWrapper.eq("username", loginInfo.username);
             List<User> users = userMapper.selectList(queryWrapper);
             if (!users.isEmpty()) {
-                queryWrapper.like("password", loginInfo.password);//lt("username",loginInfo.username);
+                queryWrapper.eq("password", loginInfo.password);//lt("username",loginInfo.username);
                 users = userMapper.selectList(queryWrapper);
                 if (!users.isEmpty()) {
                     return new ResponseInfo(EnumErrCode.OK, "账号密码正确", users);
@@ -53,7 +67,7 @@ public class UserImpl implements UserService {
                     return new ResponseInfo(EnumErrCode.BusinessError, "密码错误");
                 }
             } else {
-                return new ResponseInfo(EnumErrCode.BusinessError, "查询无记录");
+                return new ResponseInfo(EnumErrCode.BusinessError, "查询无账号记录");
             }
         } catch (Exception ex) {
             log.error(ex.getMessage());

@@ -6,7 +6,7 @@ import com.southgis.webgis.Response.ResponseInfo;
 import java.io.Serializable;
 
 /**
- * 用户信息——对数据库操作
+ * 用户信息操作
  * @author QingYang
  */
 public interface UserService extends Serializable {

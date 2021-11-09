@@ -29,7 +29,7 @@ public class UserController {
     }
 
      /**
-     *查询用户信息，传入用户名和密码
+     * 查询用户信息，传入用户名和密码
      * @param loginInfo
      * @return
      */
