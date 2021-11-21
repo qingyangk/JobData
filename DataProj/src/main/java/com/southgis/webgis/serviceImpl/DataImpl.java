@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -25,22 +26,31 @@ public class DataImpl implements DataService {
     public ResponseInfo querySalary() {
         JiebaSegmenter segmenter = new JiebaSegmenter();
         try {
-            String field = "position";
-            List<String> text = getValue(field);
+//            String field = "position";
+//            List<String> text = getValue(field);
+//            List<String> jieba = new ArrayList<>();
+//            for (String sentence : text) {
+//                List<SegToken> tokens = segmenter.process(sentence, JiebaSegmenter.SegMode.INDEX);
+//                System.out.println(tokens);
+//            }
 
-            for (String sentence:text){
-                segmenter.process(sentence, JiebaSegmenter.SegMode.INDEX);
-                System.out.println(segmenter);
-            }
             int data[] = new int[6];
-
-            return new ResponseInfo(EnumErrCode.OK,data);
+            for (int i = 0; i < Arrays.stream(data).count(); i++) {
+                data[i] += i;
+            }
+            return new ResponseInfo(EnumErrCode.OK, data);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.BusinessError, ex.getMessage());
         }
     }
 
+    /**
+     * 获取某一字段中所有的值
+     *
+     * @param field
+     * @return
+     */
     public List<String> getValue(String field) {
         QueryWrapper<DataEntity> queryWrapper = new QueryWrapper<>();
         //获得某个字段的所有值
