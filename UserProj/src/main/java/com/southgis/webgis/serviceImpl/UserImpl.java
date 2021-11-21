@@ -40,7 +40,8 @@ public class UserImpl implements UserService {
                 userMapper.insert(module);
                 return new ResponseInfo(EnumErrCode.OK, "用户信息入库成功");
             }
-        }catch (Exception ex){
+        }
+        catch (Exception ex){
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.BusinessError, ex.getMessage());
         }
@@ -52,6 +53,7 @@ public class UserImpl implements UserService {
      * @param loginInfo
      * @return
      */
+    //, HttpSession session 拦截器
     public ResponseInfo queryUser(LoginInfo loginInfo) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
 

@@ -1,0 +1,26 @@
+package com.southgis.webgis.controller;
+
+import com.southgis.webgis.Response.ResponseInfo;
+import com.southgis.webgis.service.DataService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+@RestController
+@RequestMapping("/data")
+public class DataController {
+
+    @Resource
+    DataService dataService;
+
+    /**
+     * 查询薪资及地区
+     */
+    @GetMapping("/querySalary")
+
+    public ResponseInfo querySalary(){
+        return dataService.querySalary();
+    }
+}

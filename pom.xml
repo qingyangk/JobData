@@ -25,6 +25,8 @@
         <module>MainProj</module>
         <module>UserProj</module>
         <module>ResponseProj</module>
+        <module>DataProj</module>
+        <module>AlgorithmProj</module>
     </modules>
 
 <!--    管理项目-->
