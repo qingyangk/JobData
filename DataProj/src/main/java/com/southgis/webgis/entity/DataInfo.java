@@ -1,7 +1,5 @@
 package com.southgis.webgis.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -22,19 +20,31 @@ public class DataInfo {
      * 发布日期
      */
     //public Time time;
-
-    @TableId(value = "id",type = IdType.AUTO)
-    public Integer id;
     /**
      * 薪水
      */
     @JsonProperty("value")
-    public String salary;
+    public int[] value;
 
     /**
      * 职位
      */
     @JsonProperty("name")
-    public String position;
+    public String[] position;
 
+    public int[] getValue() {
+        return value;
+    }
+
+    public void setValue(int[] value) {
+        this.value = value;
+    }
+
+    public String[] getPosition() {
+        return position;
+    }
+
+    public void setPosition(String[] position) {
+        this.position = position;
+    }
 }
