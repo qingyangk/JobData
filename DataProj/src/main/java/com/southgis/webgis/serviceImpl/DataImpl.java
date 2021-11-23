@@ -5,7 +5,8 @@ import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.Response.entity.EnumErrCode;
 import com.southgis.webgis.entity.DataEntity;
 import com.southgis.webgis.entity.DataInfo;
-import com.southgis.webgis.entity.DataType;
+import com.southgis.webgis.entity.CodeEntity;
+import com.southgis.webgis.entity.JobInfo;
 import com.southgis.webgis.mapper.DataMapper;
 import com.southgis.webgis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class DataImpl implements DataService {
     @Resource
     DataMapper dataMapper;
 
-    public ResponseInfo querySalary(DataType model) {
+    public ResponseInfo querySalary(CodeEntity model) {
 
         try {
 //            此处使用jieba分词，此部分在python中完成
@@ -57,6 +58,33 @@ public class DataImpl implements DataService {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.BusinessError, ex.getMessage());
         }
+    }
+
+    public ResponseInfo queryForm(CodeEntity model) {
+        try {
+            JobInfo jobInfo = new JobInfo();
+            //QueryWrapper<DataEntity> queryWrapper = new QueryWrapper<>();
+            List<DataEntity> entityList = dataMapper.selectList(null);
+            List<JobInfo> jobInfos = new ArrayList<>();
+
+            for (DataEntity entity : entityList) {
+                jobInfo.company = entity.getCompany();
+                //jobInfo.experience = entity.getExperience();
+                jobInfo.position = entity.getPosition();
+                jobInfo.region = entity.getRegion();
+                jobInfo.salary = entity.getSalary();
+                //jobInfo.require = entity.getRequire();
+                jobInfo.time = entity.getTime();
+                jobInfo.type = entity.getType();
+                jobInfos.add(jobInfo);
+            }
+            return new ResponseInfo(EnumErrCode.OK, jobInfos);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError,ex.getMessage());
+        }
+
+
     }
 
     /**

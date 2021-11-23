@@ -2,7 +2,7 @@ package com.southgis.webgis.service;
 
 
 import com.southgis.webgis.Response.ResponseInfo;
-import com.southgis.webgis.entity.DataType;
+import com.southgis.webgis.entity.CodeEntity;
 
 import java.io.Serializable;
 
@@ -15,5 +15,7 @@ public interface DataService extends Serializable {
     /**
      * 职位及薪资
      */
-     ResponseInfo querySalary(DataType code);
+     ResponseInfo querySalary(CodeEntity code);
+
+     ResponseInfo queryForm(CodeEntity model);
 }
