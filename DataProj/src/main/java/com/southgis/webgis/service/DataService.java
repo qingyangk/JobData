@@ -3,6 +3,8 @@ package com.southgis.webgis.service;
 
 import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.entity.CodeEntity;
+import com.southgis.webgis.entity.PageEntity;
+import com.southgis.webgis.entity.SearchEntity;
 
 import java.io.Serializable;
 
@@ -17,5 +19,17 @@ public interface DataService extends Serializable {
      */
      ResponseInfo querySalary(CodeEntity code);
 
-     ResponseInfo queryForm(CodeEntity model);
+    /**
+     * 展示表格内容
+     * @param page
+     * @return
+     */
+     ResponseInfo queryForm(PageEntity page);
+
+    /**
+     * 在表格中查询关键字
+     * @param model
+     * @return
+     */
+     ResponseInfo queryAny(SearchEntity model);
 }

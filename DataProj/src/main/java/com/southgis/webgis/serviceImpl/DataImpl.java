@@ -3,10 +3,7 @@ package com.southgis.webgis.serviceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.Response.entity.EnumErrCode;
-import com.southgis.webgis.entity.DataEntity;
-import com.southgis.webgis.entity.DataInfo;
-import com.southgis.webgis.entity.CodeEntity;
-import com.southgis.webgis.entity.JobInfo;
+import com.southgis.webgis.entity.*;
 import com.southgis.webgis.mapper.DataMapper;
 import com.southgis.webgis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +13,11 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 数据提取接口
+ *
+ * @author QingYang
+ */
 @Slf4j
 @Service(DataImpl.SERVICE_BEAN_NAME)
 public class DataImpl implements DataService {
@@ -60,31 +62,151 @@ public class DataImpl implements DataService {
         }
     }
 
-    public ResponseInfo queryForm(CodeEntity model) {
+    /**
+     * 展示表格中的内容
+     *
+     * @param model
+     * @return
+     */
+    public ResponseInfo queryForm(PageEntity model) {
         try {
-            JobInfo jobInfo = new JobInfo();
-            //QueryWrapper<DataEntity> queryWrapper = new QueryWrapper<>();
-            List<DataEntity> entityList = dataMapper.selectList(null);
+            List<DataEntity> jobEntity = dataMapper.selectList(null);
+
+            //符合条件要素个数
+            int featureCount = jobEntity.size();
+            //要素最小值
+            int minCount = 0;
+            //要素最大值
+            int maxCount = featureCount;
+            //计数
+            int count = 0;
+            int pageSize = 8;
+            int PageNum = model.page;
+            int pages;
+            if (maxCount > 8) {
+                if (maxCount % pageSize == 0) {
+                    pages = maxCount / pageSize;
+                } else {
+                    pages = maxCount / pageSize + 1;
+                }
+            } else {
+                pages = 1;
+            }
+            SearchInfo searchInfo = new SearchInfo();
+            searchInfo.setTotal(maxCount);
+
+            if (pageSize != 0 && PageNum != 0) {
+                minCount = (PageNum - 1) * pageSize;  //要素最小值
+                maxCount = PageNum * pageSize;  /* 要素最大值 */
+            }
+
             List<JobInfo> jobInfos = new ArrayList<>();
 
-            for (DataEntity entity : entityList) {
-                jobInfo.company = entity.getCompany();
-                //jobInfo.experience = entity.getExperience();
-                jobInfo.position = entity.getPosition();
-                jobInfo.region = entity.getRegion();
-                jobInfo.salary = entity.getSalary();
-                //jobInfo.require = entity.getRequire();
-                jobInfo.time = entity.getTime();
-                jobInfo.type = entity.getType();
-                jobInfos.add(jobInfo);
+            for (DataEntity entity : jobEntity) {
+                count++;
+                if (count > minCount && count <= maxCount) {
+                    JobInfo jobInfo = new JobInfo();
+                    jobInfo.company = entity.getCompany();
+                    //jobInfo.experience = entity.getExperience();
+                    jobInfo.position = entity.getPosition();
+                    jobInfo.region = entity.getRegion();
+                    jobInfo.salary = entity.getSalary();
+                    //jobInfo.require = entity.getRequire();
+                    jobInfo.time = entity.getTime();
+                    jobInfo.type = entity.getType();
+                    jobInfos.add(jobInfo);
+                }
             }
-            return new ResponseInfo(EnumErrCode.OK, jobInfos);
+
+            searchInfo.setJobInfos(jobInfos);
+            searchInfo.setPages(pages);
+            return new ResponseInfo(EnumErrCode.OK, searchInfo);
         } catch (Exception ex) {
             log.error(ex.getMessage());
-            return new ResponseInfo(EnumErrCode.CommonError,ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
         }
 
 
+    }
+
+    /**
+     * 关键字模糊查找--表格
+     *
+     * @param model
+     * @return
+     */
+    public ResponseInfo queryAny(SearchEntity model) {
+        String sql = model.getModel();
+        try {
+            QueryWrapper<DataEntity> queryWrapper = new QueryWrapper<>();
+            //JobInfo jobInfo = new JobInfo();
+            queryWrapper.like("company", sql).or().like("position", sql)
+                    .or().like("region", sql)
+                    .or().like("salary", sql)
+                    .or().like("type", sql)
+                    .or().like("time", sql);
+            List<DataEntity> jobEntity = dataMapper.selectList(queryWrapper);
+
+            //符合条件要素个数
+            int featureCount = jobEntity.size();
+            //要素最小值
+            int minCount = 0;
+            //要素最大值
+            int maxCount = featureCount;
+            //计数
+            int count = 0;
+            int pageSize = 8;
+            int PageNum = model.pageNum;
+            int pages;
+            if (maxCount > 8) {
+                if (maxCount % pageSize == 0) {
+                    pages = maxCount / pageSize;
+                } else {
+                    pages = maxCount / pageSize + 1;
+                }
+            } else {
+                pages = 1;
+            }
+            SearchInfo searchInfo = new SearchInfo();
+            searchInfo.setTotal(maxCount);
+
+            if (pageSize != 0 && PageNum != 0) {
+                minCount = (PageNum - 1) * pageSize;  //要素最小值
+                maxCount = PageNum * pageSize;  /* 要素最大值 */
+            }
+
+
+//            Page<DataEntity> objectPage = new Page<>(model.getPageNum(), 8);
+//            Page<DataEntity> entityPage = dataMapper.selectPage(objectPage, queryWrapper);z
+//            Page<JobInfo> jobInfoPage = new Page<JobInfo>();
+
+            List<JobInfo> jobInfos = new ArrayList<>();
+            for (DataEntity entity : jobEntity) {
+                count++;
+                if (count > minCount && count <= maxCount) {
+                    JobInfo jobInfo = new JobInfo();
+                    jobInfo.setCompany(entity.getCompany());
+                    //jobInfo.experience = entity.getExperience();
+                    jobInfo.setPosition(entity.getPosition());
+                    jobInfo.setRegion(entity.getRegion());
+                    jobInfo.setSalary(entity.getSalary());
+                    //jobInfo.require = entity.getRequire();
+                    jobInfo.setTime(entity.getTime());
+                    jobInfo.setType(entity.getType());
+                    jobInfos.add(jobInfo);
+                }
+                if (count > PageNum * pageSize)
+                    break;
+            }
+            searchInfo.setJobInfos(jobInfos);
+//            searchInfo.setTotal(maxCount); 此处需要提前赋值
+            searchInfo.setPages(pages);
+//            jobInfoPage.setRecords(jobInfos);
+            return new ResponseInfo(EnumErrCode.OK, searchInfo);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
+        }
     }
 
     /**

@@ -21,9 +21,9 @@ public class DataEntity {
     public String type;
     public String time;
 
-    public Integer getId() {
-        return id;
-    }
+//    public Integer getId() {
+//        return id;
+//    }
 
     public String getCompany() {
         return company;
