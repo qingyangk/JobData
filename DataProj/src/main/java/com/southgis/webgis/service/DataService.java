@@ -34,8 +34,14 @@ public interface DataService extends Serializable {
      ResponseInfo queryAny(SearchEntity model);
 
     /**
-     *
+     *薪资与工作经验关系
      * @return
      */
      ResponseInfo salaryRe();
+
+    /**
+     * 工作经验数量统计
+     * @return
+     */
+     ResponseInfo experienceCo();
 }

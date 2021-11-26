@@ -1,6 +1,7 @@
 package com.southgis.webgis.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -14,9 +15,10 @@ public class OldEntity {
     @TableId(value = "OBJECTID", type = IdType.AUTO)
     public Integer id;
 
-    @TableId("EXPERENCE")
+    @TableField(value = "EXPERENCE")
     public String experience;
 
-    @TableId("AVG_SALARY")
+    @TableField(value = "AVG_SALARY")
     public String salary;
+
 }

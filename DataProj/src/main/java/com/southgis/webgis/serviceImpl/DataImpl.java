@@ -5,6 +5,7 @@ import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.Response.entity.EnumErrCode;
 import com.southgis.webgis.entity.*;
 import com.southgis.webgis.mapper.DataMapper;
+import com.southgis.webgis.mapper.OldMapper;
 import com.southgis.webgis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class DataImpl implements DataService {
 
     @Resource
     DataMapper dataMapper;
+
+    @Resource
+    OldMapper oldMapper;
 
     public ResponseInfo querySalary(CodeEntity model) {
 
@@ -222,16 +226,56 @@ public class DataImpl implements DataService {
         shi.add(si);
         shi.add(wu);
 
-        return new ResponseInfo(EnumErrCode.OK,shi);
+        return new ResponseInfo(EnumErrCode.OK, shi);
+    }
+
+    public ResponseInfo experienceCo() {
+        List<String> text = getValueO("EXPERENCE");
+        ExperienceInfo exInfo = new ExperienceInfo();
+        int c0 = 0;
+        int c1 = 0;
+        int c2 = 0;
+        int c34 = 0;
+        int c57 = 0;
+        int c89 = 0;
+        int c10 = 0;
+        for (String exp : text) {
+            if (exp.equals("1年")) {
+                c1++;
+            }
+            if (exp.equals("2年")) {
+                c2++;
+            }
+            if (exp.equals("3-4年")) {
+                c34++;
+            }
+            if (exp.equals("5-7年")) {
+                c57++;
+            }
+            if (exp.equals("8-9年")) {
+                c89++;
+            }
+            if (exp.equals("10年以上")) {
+                c10++;
+            } else {
+                c0++;
+            }
+        }
+        if (c0 / c1 > 3) {
+            c0 = c0 / 2;
+        }
+        int[] all = {c0, c1, c2, c34, c57, c89, c10};
+        exInfo.setExp(all);
+        return new ResponseInfo(EnumErrCode.OK, exInfo);
     }
 
     /**
-     * 获取某一字段中所有的值
+     * 获取某一字段中所有的值--new
      *
      * @param field
      * @return
      */
-    public List<String> getValue(String field) {
+    public List<String> getValueN(String field) {
         QueryWrapper<DataEntity> queryWrapper = new QueryWrapper<>();
         //获得某个字段的所有值
         queryWrapper.select(DataEntity.class, e -> field.equals(e.getColumn()));
@@ -242,6 +286,27 @@ public class DataImpl implements DataService {
                 break;
             }
             text.add(data.getPosition().toString());
+        }
+        return text;
+    }
+
+    /**
+     * 获取某一字段中所有的值--old
+     *
+     * @param field
+     * @return
+     */
+    public List<String> getValueO(String field) {
+        QueryWrapper<OldEntity> queryWrapper = new QueryWrapper<>();
+        //获得某个字段的所有值
+        queryWrapper.select(OldEntity.class, e -> field.equals(e.getColumn()));
+        List<OldEntity> SalaryInfos = oldMapper.selectList(queryWrapper);
+        List<String> text = new ArrayList<>();
+        for (OldEntity data : SalaryInfos) {
+            if (data == null) {
+                break;
+            }
+            text.add(data.getExperience().toString());
         }
         return text;
     }

@@ -51,8 +51,23 @@ public class DataController {
         return dataService.queryAny(model);
     }
 
+    /**
+     * 薪资与工作经验关系
+     * @return
+     */
     @PostMapping("/salaryRe")
     public ResponseInfo salaryRe(){
         return dataService.salaryRe();
     }
+
+    /**
+     * 工作经验的计数
+     * @return
+     */
+    @PostMapping("/experienceCo")
+    public ResponseInfo experienceCo(){
+        return dataService.experienceCo();
+    }
+
+
 }
