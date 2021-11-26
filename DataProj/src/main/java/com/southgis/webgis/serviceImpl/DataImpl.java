@@ -233,6 +233,7 @@ public class DataImpl implements DataService {
         List<String> text = getValueO("EXPERENCE");
         ExperienceInfo exInfo = new ExperienceInfo();
         int c0 = 0;
+        int cc = 0;
         int c1 = 0;
         int c2 = 0;
         int c34 = 0;
@@ -242,6 +243,9 @@ public class DataImpl implements DataService {
         for (String exp : text) {
             if (exp.equals("1年")) {
                 c1++;
+            }
+            if (exp.equals("在校/应届生")) {
+                cc++;
             }
             if (exp.equals("2年")) {
                 c2++;
@@ -264,7 +268,7 @@ public class DataImpl implements DataService {
         if (c0 / c1 > 3) {
             c0 = c0 / 2;
         }
-        int[] all = {c0, c1, c2, c34, c57, c89, c10};
+        int[] all = {c0, cc, c1, c2, c34, c57, c89, c10};
         exInfo.setExp(all);
         return new ResponseInfo(EnumErrCode.OK, exInfo);
     }
