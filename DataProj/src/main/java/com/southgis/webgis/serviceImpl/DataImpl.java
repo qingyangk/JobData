@@ -80,10 +80,10 @@ public class DataImpl implements DataService {
             int maxCount = featureCount;
             //计数
             int count = 0;
-            int pageSize = 8;
+            int pageSize = 9;
             int PageNum = model.page;
             int pages;
-            if (maxCount > 8) {
+            if (maxCount > pageSize) {
                 if (maxCount % pageSize == 0) {
                     pages = maxCount / pageSize;
                 } else {
@@ -155,10 +155,10 @@ public class DataImpl implements DataService {
             int maxCount = featureCount;
             //计数
             int count = 0;
-            int pageSize = 8;
+            int pageSize = 9;
             int PageNum = model.pageNum;
             int pages;
-            if (maxCount > 8) {
+            if (maxCount > pageSize) {
                 if (maxCount % pageSize == 0) {
                     pages = maxCount / pageSize;
                 } else {
@@ -207,6 +207,22 @@ public class DataImpl implements DataService {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
         }
+    }
+
+    public ResponseInfo salaryRe() {
+        double[] yi = {5.85, 6.67, 7.85, 8.12, 9.16, 13.99, 17.25, 23.8};
+        double[] er = {5.1, 5.67, 6.85, 7.12, 8.16, 12.99, 16.25, 20.8};
+        double[] san = {5.05, 5.27, 6.99, 8.55, 9.2, 12.13, 18.25, 22.8};
+        double[] si = {5.1, 5.67, 6.85, 7.12, 8.16, 12.99, 16.25, 20.8};
+        double[] wu = {5.05, 5.27, 6.99, 8.55, 9.2, 12.13, 18.25, 22.8};
+        List<double[]> shi = new ArrayList<>();
+        shi.add(yi);
+        shi.add(er);
+        shi.add(san);
+        shi.add(si);
+        shi.add(wu);
+
+        return new ResponseInfo(EnumErrCode.OK,shi);
     }
 
     /**

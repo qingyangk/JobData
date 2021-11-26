@@ -32,4 +32,10 @@ public interface DataService extends Serializable {
      * @return
      */
      ResponseInfo queryAny(SearchEntity model);
+
+    /**
+     *
+     * @return
+     */
+     ResponseInfo salaryRe();
 }

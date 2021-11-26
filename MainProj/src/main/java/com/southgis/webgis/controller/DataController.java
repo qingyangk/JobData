@@ -50,4 +50,9 @@ public class DataController {
     public ResponseInfo queryAny(@RequestBody SearchEntity model){
         return dataService.queryAny(model);
     }
+
+    @PostMapping("/salaryRe")
+    public ResponseInfo salaryRe(){
+        return dataService.salaryRe();
+    }
 }
