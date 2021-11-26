@@ -69,5 +69,13 @@ public class DataController {
         return dataService.experienceCo();
     }
 
+    /**
+     * 区域中城市的薪资排行
+     * @return
+     */
+    @PostMapping("/salaryAreaTop")
+    public ResponseInfo salaryAreaTop(){
+        return dataService.salaryAreaTop();
+    }
 
 }

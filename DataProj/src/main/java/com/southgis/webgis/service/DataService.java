@@ -44,4 +44,10 @@ public interface DataService extends Serializable {
      * @return
      */
      ResponseInfo experienceCo();
+
+    /**
+     * 地区城市间的薪资top10
+     * @return
+     */
+    ResponseInfo salaryAreaTop();
 }

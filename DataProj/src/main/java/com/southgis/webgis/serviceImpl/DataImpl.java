@@ -24,9 +24,11 @@ import java.util.List;
 public class DataImpl implements DataService {
     public final static String SERVICE_BEAN_NAME = "DataService";
 
+    //新表
     @Resource
     DataMapper dataMapper;
 
+    //旧表
     @Resource
     OldMapper oldMapper;
 
@@ -213,6 +215,11 @@ public class DataImpl implements DataService {
         }
     }
 
+    /**
+     * 薪资与工作经验关系
+     *
+     * @return
+     */
     public ResponseInfo salaryRe() {
         double[] yi = {5.85, 6.67, 7.85, 8.12, 9.16, 13.99, 17.25, 23.8};
         double[] er = {5.1, 5.67, 6.85, 7.12, 8.16, 12.99, 16.25, 20.8};
@@ -229,48 +236,85 @@ public class DataImpl implements DataService {
         return new ResponseInfo(EnumErrCode.OK, shi);
     }
 
+    /**
+     * 工作经验数量统计
+     *
+     * @return
+     */
     public ResponseInfo experienceCo() {
-        List<String> text = getValueO("EXPERENCE");
-        ExperienceInfo exInfo = new ExperienceInfo();
-        int c0 = 0;
-        int cc = 0;
-        int c1 = 0;
-        int c2 = 0;
-        int c34 = 0;
-        int c57 = 0;
-        int c89 = 0;
-        int c10 = 0;
-        for (String exp : text) {
-            if (exp.equals("1年")) {
-                c1++;
+        try {
+            List<String> text = getValueO("EXPERENCE");
+            ExperienceInfo exInfo = new ExperienceInfo();
+            int c0 = 0;
+            int cc = 0;
+            int c1 = 0;
+            int c2 = 0;
+            int c34 = 0;
+            int c57 = 0;
+            int c89 = 0;
+            int c10 = 0;
+            for (String exp : text) {
+                if (exp.equals("1年")) {
+                    c1++;
+                }
+                if (exp.equals("在校/应届生")) {
+                    cc++;
+                }
+                if (exp.equals("2年")) {
+                    c2++;
+                }
+                if (exp.equals("3-4年")) {
+                    c34++;
+                }
+                if (exp.equals("5-7年")) {
+                    c57++;
+                }
+                if (exp.equals("8-9年")) {
+                    c89++;
+                }
+                if (exp.equals("10年以上")) {
+                    c10++;
+                } else {
+                    c0++;
+                }
             }
-            if (exp.equals("在校/应届生")) {
-                cc++;
+            if (c0 / c1 > 3) {
+                c0 = c0 / 2;
             }
-            if (exp.equals("2年")) {
-                c2++;
-            }
-            if (exp.equals("3-4年")) {
-                c34++;
-            }
-            if (exp.equals("5-7年")) {
-                c57++;
-            }
-            if (exp.equals("8-9年")) {
-                c89++;
-            }
-            if (exp.equals("10年以上")) {
-                c10++;
-            } else {
-                c0++;
-            }
+            int[] all = {c0, cc, c1, c2, c34, c57, c89, c10};
+            exInfo.setExp(all);
+            return new ResponseInfo(EnumErrCode.OK, exInfo);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
         }
-        if (c0 / c1 > 3) {
-            c0 = c0 / 2;
+    }
+
+    public ResponseInfo salaryAreaTop() {
+
+        try {
+            double city1 = getCitySalary("大连");
+            //double city2 = getCitySalary("营口");
+            double city3 = getCitySalary("青岛");
+            double city4 = getCitySalary("西昌");
+            //double city5 = getCitySalary("秦皇岛");
+            double city6 = getCitySalary("唐山");
+            double city7 = getCitySalary("天津");
+            double city8 = getCitySalary("北京");
+            double city9 = getCitySalary("烟台");
+
+            SalaryAreaInfo saInfo = new SalaryAreaInfo();
+            saInfo.setValue(new double[]{city1, city3, city4,
+                    city6, city7, city8, city9});
+            saInfo.setCity(new String[]{"大连", "青岛", "西昌"
+                    , "唐山", "天津", "北京", "烟台"});
+
+
+            return new ResponseInfo(EnumErrCode.OK, saInfo);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
         }
-        int[] all = {c0, cc, c1, c2, c34, c57, c89, c10};
-        exInfo.setExp(all);
-        return new ResponseInfo(EnumErrCode.OK, exInfo);
     }
 
     /**
@@ -314,6 +358,25 @@ public class DataImpl implements DataService {
         }
         return text;
     }
+
+    public double getCitySalary(String city) {
+        QueryWrapper<OldEntity> qw = new QueryWrapper<>();
+        qw.like("WORK_AREA", city);
+
+        List<OldEntity> salaryEntity = oldMapper.selectList(qw);
+        double count = salaryEntity.size();
+        double sum = 0;
+        for (OldEntity entity : salaryEntity) {
+            char shuzi = entity.salary.toCharArray()[0];
+            if (Character.isDigit(shuzi)) {
+                sum += Double.parseDouble(entity.salary);
+            } else {
+                count--;
+            }
+        }
+        return sum / count;
+    }
 }
+
 
 
