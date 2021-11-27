@@ -74,8 +74,8 @@ public class DataController {
      * @return
      */
     @PostMapping("/salaryAreaTop")
-    public ResponseInfo salaryAreaTop(){
-        return dataService.salaryAreaTop();
+    public ResponseInfo salaryAreaTop(CodeEntity code){
+        return dataService.salaryAreaTop(code);
     }
 
 }

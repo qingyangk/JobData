@@ -49,5 +49,5 @@ public interface DataService extends Serializable {
      * 地区城市间的薪资top10
      * @return
      */
-    ResponseInfo salaryAreaTop();
+    ResponseInfo salaryAreaTop(CodeEntity code);
 }

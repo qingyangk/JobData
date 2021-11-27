@@ -290,18 +290,35 @@ public class DataImpl implements DataService {
         }
     }
 
-    public ResponseInfo salaryAreaTop() {
-
+    public ResponseInfo salaryAreaTop(CodeEntity code) {
+        String[] citys = new String[0];
         try {
-            double city1 = getCitySalary("大连");
+            if (code.getCode() == 0) {
+                citys = new String[]{"大连", "青岛", "西昌"
+                        , "唐山", "天津", "北京", "烟台"};
+            }
+            if (code.getCode() == 1) {
+                citys = new String[]{"大连", "青岛", "西昌"
+                        , "唐山", "天津", "北京", "烟台"};
+            }
+            if (code.getCode() == 2) {
+                citys = new String[]{"大连", "青岛", "西昌"
+                        , "唐山", "天津", "北京", "烟台"};
+            }
+            if (code.getCode() == 3) {
+                citys = new String[]{"大连", "青岛", "西昌"
+                        , "唐山", "天津", "北京", "烟台"};
+            }
+
+            double city1 = getCitySalary(citys[0]);
             //double city2 = getCitySalary("营口");
-            double city3 = getCitySalary("青岛");
-            double city4 = getCitySalary("西昌");
+            double city3 = getCitySalary(citys[1]);
+            double city4 = getCitySalary(citys[2]);
             //double city5 = getCitySalary("秦皇岛");
-            double city6 = getCitySalary("唐山");
-            double city7 = getCitySalary("天津");
-            double city8 = getCitySalary("北京");
-            double city9 = getCitySalary("烟台");
+            double city6 = getCitySalary(citys[3]);
+            double city7 = getCitySalary(citys[4]);
+            double city8 = getCitySalary(citys[5]);
+            double city9 = getCitySalary(citys[6]);
 
             SalaryAreaInfo saInfo = new SalaryAreaInfo();
             saInfo.setValue(new double[]{city1, city3, city4,
@@ -359,6 +376,12 @@ public class DataImpl implements DataService {
         return text;
     }
 
+    /**
+     * 获取城市平均薪资
+     *
+     * @param city
+     * @return
+     */
     public double getCitySalary(String city) {
         QueryWrapper<OldEntity> qw = new QueryWrapper<>();
         qw.like("WORK_AREA", city);
