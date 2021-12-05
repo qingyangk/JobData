@@ -3,8 +3,8 @@ package com.southgis.webgis.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.southgis.webgis.entity.DataEntity;
-import com.southgis.webgis.entity.DataInfo;
+import com.southgis.webgis.entity.table.DataEntity;
+import com.southgis.webgis.entity.info.DataInfo;
 
 import java.util.List;
 

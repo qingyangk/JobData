@@ -4,6 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.Response.entity.EnumErrCode;
 import com.southgis.webgis.entity.*;
+import com.southgis.webgis.entity.info.*;
+import com.southgis.webgis.entity.table.DataDisEntity;
+import com.southgis.webgis.entity.table.DataEntity;
+import com.southgis.webgis.entity.table.OldEntity;
+import com.southgis.webgis.mapper.DataDisMapper;
 import com.southgis.webgis.mapper.DataMapper;
 import com.southgis.webgis.mapper.OldMapper;
 import com.southgis.webgis.service.DataService;
@@ -31,6 +36,10 @@ public class DataImpl implements DataService {
     //旧表
     @Resource
     OldMapper oldMapper;
+
+    //处理完的数据
+    @Resource
+    DataDisMapper dataDisMapper;
 
     public ResponseInfo querySalary(CodeEntity model) {
 
@@ -309,16 +318,16 @@ public class DataImpl implements DataService {
                 citys = new String[]{"大连", "青岛", "西昌"
                         , "唐山", "天津", "北京", "烟台"};
             }
-
-            double city1 = getCitySalary(citys[0]);
+            String field = "WORK_AREA";
+            double city1 = getFieldSalary(field, citys[0]);
             //double city2 = getCitySalary("营口");
-            double city3 = getCitySalary(citys[1]);
-            double city4 = getCitySalary(citys[2]);
+            double city3 = getFieldSalary(field, citys[1]);
+            double city4 = getFieldSalary(field, citys[2]);
             //double city5 = getCitySalary("秦皇岛");
-            double city6 = getCitySalary(citys[3]);
-            double city7 = getCitySalary(citys[4]);
-            double city8 = getCitySalary(citys[5]);
-            double city9 = getCitySalary(citys[6]);
+            double city6 = getFieldSalary(field, citys[3]);
+            double city7 = getFieldSalary(field, citys[4]);
+            double city8 = getFieldSalary(field, citys[5]);
+            double city9 = getFieldSalary(field, citys[6]);
 
             SalaryAreaInfo saInfo = new SalaryAreaInfo();
             saInfo.setValue(new double[]{city1, city3, city4,
@@ -326,8 +335,58 @@ public class DataImpl implements DataService {
             saInfo.setCity(new String[]{"大连", "青岛", "西昌"
                     , "唐山", "天津", "北京", "烟台"});
 
-
             return new ResponseInfo(EnumErrCode.OK, saInfo);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
+        }
+    }
+
+    /**
+     * 行业薪资top
+     *
+     * @return
+     */
+    public ResponseInfo sIndustryTop() {
+        try {
+            //对应表字段名--行业
+            String field = "INDUSTRY";
+            String industry[] = new String[]{"专业服务", "公共事业", "仪器", "环保"
+                    , "机械", "计算机", "建筑", "交通", "化工", "新能源"};
+            double count[] = new double[10];
+            for (int i = 0; i < industry.length; i++) {
+                count[i] = getFieldSalary(field, industry[i]);
+            }
+
+            return new ResponseInfo(EnumErrCode.OK, count);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
+        }
+    }
+
+    /**
+     * 统计城市中各等级薪资的数量
+     *
+     * @param code
+     * @return
+     */
+    public ResponseInfo salaryCo(CodeEntity code) {
+        try {
+            List<CommonInfo> commonInfos = new ArrayList<>();
+            int count = 0;
+            List<DataDisEntity> disEntity = dataDisMapper.selectList(null);
+            for (DataDisEntity entity : disEntity) {
+                CommonInfo commonInfo = new CommonInfo();
+                if (count < 20) {
+                    commonInfo.setName(entity.salarytxt);
+                    commonInfo.setValue(entity.salaryCo);
+                    commonInfos.add(commonInfo);
+                }
+                count++;
+            }
+            return new ResponseInfo(EnumErrCode.OK, commonInfos);
+
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
@@ -377,14 +436,16 @@ public class DataImpl implements DataService {
     }
 
     /**
-     * 获取城市平均薪资
+     * 获取某一字段的平均薪资
+     * 请求为 对应的表字段 、 字段名
      *
-     * @param city
+     * @param model
+     * @param field
      * @return
      */
-    public double getCitySalary(String city) {
+    public double getFieldSalary(String field, String model) {
         QueryWrapper<OldEntity> qw = new QueryWrapper<>();
-        qw.like("WORK_AREA", city);
+        qw.like(field, model);
 
         List<OldEntity> salaryEntity = oldMapper.selectList(qw);
         double count = salaryEntity.size();
@@ -399,6 +460,30 @@ public class DataImpl implements DataService {
         }
         return sum / count;
     }
+
+
+//    public double getFieldSalaryCO(String field, String model) {
+//        QueryWrapper<OldEntity> qw = new QueryWrapper<>();
+//        qw.like(field, model);
+//
+//        List<OldEntity> salaryEntity = oldMapper.selectList(qw);
+//        double sum = 0;
+//        int[]count = new int[10];
+//        for (OldEntity entity : salaryEntity) {
+//            //转换类型 string-->char
+//            char shuzi = entity.salary.toCharArray()[0];
+//            if (Character.isDigit(shuzi)) {
+//                double xz = Double.parseDouble(entity.salary);
+//                if (xz>0&&xz<3){
+//
+//                }
+//            } else {
+//                continue;
+//            }
+//        }
+//        return sum / count;
+//    }
+
 }
 
 

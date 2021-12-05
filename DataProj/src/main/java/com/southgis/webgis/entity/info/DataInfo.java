@@ -1,4 +1,4 @@
-package com.southgis.webgis.entity;
+package com.southgis.webgis.entity.info;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

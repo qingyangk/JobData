@@ -50,4 +50,15 @@ public interface DataService extends Serializable {
      * @return
      */
     ResponseInfo salaryAreaTop(CodeEntity code);
+
+    /**
+     * 行业薪资top
+     * @return
+     */
+    ResponseInfo sIndustryTop();
+
+    /**
+     * 统计城市中各等级薪资的数量
+     */
+    ResponseInfo salaryCo(CodeEntity code);
 }

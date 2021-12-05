@@ -1,4 +1,4 @@
-package com.southgis.webgis.entity;
+package com.southgis.webgis.entity.info;
 
 import lombok.Data;
 
