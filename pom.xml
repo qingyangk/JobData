@@ -27,6 +27,7 @@
         <module>ResponseProj</module>
         <module>DataProj</module>
         <module>AlgorithmProj</module>
+        <module>AnswerProj</module>
     </modules>
 
 <!--    管理项目-->
@@ -55,6 +56,11 @@
             <dependency>
                 <groupId>com.southgis</groupId>
                 <artifactId>AlgorithmProj</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.southgis</groupId>
+                <artifactId>AnswerProj</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>

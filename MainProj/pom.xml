@@ -85,6 +85,16 @@
             <artifactId>DataProj</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>com.southgis</groupId>
+            <artifactId>AnswerProj</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>2.5.5</version>
+        </dependency>
 
     </dependencies>
 
