@@ -30,7 +30,7 @@ public class AnswerImpl implements AnswerService {
     public final static String SERVICE_BEAN_NAME = "AnswerService";
 
     /**
-     * 智能问答--传入句子
+     * 智能问答--传入问句
      *
      * @return
      */
@@ -45,12 +45,27 @@ public class AnswerImpl implements AnswerService {
         for (Score score1 : scores) {
             System.out.println(score1);
         }
+
+//        RestHighLevelClient client = new RestHighLevelClient(
+//                RestClient.builder(
+//                        new HttpHost("localhost", 9200, "http")));
+//        System.out.println(client.toString());
+
+
         return new ResponseInfo(EnumErrCode.OK, null, scores);
     }
 
+    /***
+     * 连接es数据库参数
+     */
+//    public void init(){
+//        this.IP = "192.168.？.？";
+//        this.PORT = 9300;
+//    }
 
     /**
-     * TextRank算法
+     * TextRank算法--实现分词及问题关键词提取
+     *
      * @param model
      * @return
      */
