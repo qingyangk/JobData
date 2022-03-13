@@ -11,4 +11,7 @@ public class PageEntity {
      */
     @JsonProperty("pageNum")
     public int page;
+
+    @JsonProperty("pageSize")
+    public int count;
 }

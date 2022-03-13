@@ -23,4 +23,9 @@ public class AnswerController {
     public ResponseInfo AnswerSentence(@RequestBody Question model) {
         return answerService.answerSentence(model);
     }
+
+    @PostMapping("/wordcloud")
+    public ResponseInfo WordCloud() {
+        return answerService.wordCloud();
+    }
 }

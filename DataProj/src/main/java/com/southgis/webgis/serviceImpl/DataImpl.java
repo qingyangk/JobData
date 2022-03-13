@@ -95,7 +95,7 @@ public class DataImpl implements DataService {
             int maxCount = featureCount;
             //计数
             int count = 0;
-            int pageSize = 9;
+            int pageSize = model.getCount();
             int PageNum = model.page;
             int pages;
             if (maxCount > pageSize) {
@@ -122,13 +122,16 @@ public class DataImpl implements DataService {
                 if (count > minCount && count <= maxCount) {
                     JobInfo jobInfo = new JobInfo();
                     jobInfo.company = entity.getCompany();
-                    //jobInfo.experience = entity.getExperience();
+                    jobInfo.experience = entity.getExperience();
                     jobInfo.position = entity.getPosition();
                     jobInfo.region = entity.getRegion();
-                    jobInfo.salary = entity.getSalary();
-                    //jobInfo.require = entity.getRequire();
+                    jobInfo.salarySe = entity.getSalarySe();
+                    jobInfo.education = entity.getEducation();
                     jobInfo.time = entity.getTime();
-                    jobInfo.type = entity.getType();
+                    jobInfo.size = entity.getSize();
+                    jobInfo.id = entity.getId();
+                    jobInfo.x = entity.getX();
+                    jobInfo.y = entity.getY();
                     jobInfos.add(jobInfo);
                 }
             }
@@ -170,7 +173,7 @@ public class DataImpl implements DataService {
             int maxCount = featureCount;
             //计数
             int count = 0;
-            int pageSize = 9;
+            int pageSize = model.getCount();
             int PageNum = model.pageNum;
             int pages;
             if (maxCount > pageSize) {
@@ -201,13 +204,16 @@ public class DataImpl implements DataService {
                 if (count > minCount && count <= maxCount) {
                     JobInfo jobInfo = new JobInfo();
                     jobInfo.setCompany(entity.getCompany());
-                    //jobInfo.experience = entity.getExperience();
+                    jobInfo.experience = entity.getExperience();
                     jobInfo.setPosition(entity.getPosition());
                     jobInfo.setRegion(entity.getRegion());
-                    jobInfo.setSalary(entity.getSalary());
-                    //jobInfo.require = entity.getRequire();
+                    jobInfo.setSalarySe(entity.getSalarySe());
+                    jobInfo.setEducation(entity.getEducation());
                     jobInfo.setTime(entity.getTime());
-                    jobInfo.setType(entity.getType());
+                    jobInfo.setSize(entity.getSize());
+                    jobInfo.id = entity.getId();
+                    jobInfo.x = entity.getX();
+                    jobInfo.y = entity.getY();
                     jobInfos.add(jobInfo);
                 }
                 if (count > PageNum * pageSize)
@@ -387,6 +393,19 @@ public class DataImpl implements DataService {
             }
             return new ResponseInfo(EnumErrCode.OK, commonInfos);
 
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
+        }
+    }
+
+    public ResponseInfo queryAll(CodeEntity code) {
+        try {
+            QueryWrapper<DataEntity> qw = new QueryWrapper<>();
+            qw.eq("id", code.getCode());
+            List<DataEntity> dataEntities = dataMapper.selectList(qw);
+
+            return new ResponseInfo(EnumErrCode.OK, dataEntities);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());

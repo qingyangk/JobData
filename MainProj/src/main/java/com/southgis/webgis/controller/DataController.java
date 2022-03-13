@@ -96,11 +96,22 @@ public class DataController {
 
     /**
      * 统计城市中各等级薪资的数量
+     *
      * @param code
      * @return
      */
     @PostMapping("/salaryCo")
-    public ResponseInfo salaryCo(@RequestBody CodeEntity code){
+    public ResponseInfo salaryCo(@RequestBody CodeEntity code) {
         return dataService.salaryCo(code);
+    }
+
+    /**
+     * 依据id查询该职位的所有信息
+     * @param code
+     * @return
+     */
+    @PostMapping("queryAll")
+    public ResponseInfo queryAll(@RequestBody CodeEntity code) {
+        return dataService.queryAll(code);
     }
 }

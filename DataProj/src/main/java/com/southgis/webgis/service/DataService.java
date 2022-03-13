@@ -61,4 +61,6 @@ public interface DataService extends Serializable {
      * 统计城市中各等级薪资的数量
      */
     ResponseInfo salaryCo(CodeEntity code);
+
+    ResponseInfo queryAll(CodeEntity coode);
 }

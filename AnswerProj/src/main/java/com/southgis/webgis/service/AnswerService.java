@@ -12,5 +12,18 @@ import java.io.Serializable;
  */
 public interface AnswerService extends Serializable {
 
+    /**
+     * 智能问答--传入问句
+     *
+     * @param model
+     * @return
+     */
     ResponseInfo answerSentence(Question model);
+
+    /**
+     * 词云
+     *
+     * @return
+     */
+    ResponseInfo wordCloud();
 }

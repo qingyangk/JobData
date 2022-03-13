@@ -34,6 +34,13 @@
             <artifactId>ikanalyzer</artifactId>
             <version>2012_u6</version>
         </dependency>
+        <!--ansj分词引入-->
+        <dependency>
+            <groupId>org.ansj</groupId>
+            <artifactId>ansj_seg</artifactId>
+            <version>5.1.1</version>
+        </dependency>
+
 
         <!--        neo4j-->
         <!--        <dependency>-->
@@ -48,21 +55,21 @@
         <!--        </dependency>-->
 
         <!--        es数据库-->
-<!--        <dependency>-->
-<!--            <groupId>org.elasticsearch.client</groupId>-->
-<!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
-<!--            <version>7.0.1</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.elasticsearch.client</groupId>-->
-<!--            <artifactId>elasticsearch-rest-client</artifactId>-->
-<!--            <version>7.0.1</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.elasticsearch</groupId>-->
-<!--            <artifactId>elasticsearch</artifactId>-->
-<!--            <version>7.0.1</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.elasticsearch.client</groupId>-->
+        <!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
+        <!--            <version>7.0.1</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.elasticsearch.client</groupId>-->
+        <!--            <artifactId>elasticsearch-rest-client</artifactId>-->
+        <!--            <version>7.0.1</version>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.elasticsearch</groupId>-->
+        <!--            <artifactId>elasticsearch</artifactId>-->
+        <!--            <version>7.0.1</version>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>com.southgis</groupId>
@@ -70,13 +77,13 @@
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>neo4j</id>-->
-<!--            <url>http://m2.neo4j.org/content/repositories/releases/</url>-->
-<!--            <releases>-->
-<!--                <enabled>true</enabled>-->
-<!--            </releases>-->
-<!--&lt;!&ndash;        </repository>&ndash;&gt;-->
-<!--    </repositories>-->
+    <!--    <repositories>-->
+    <!--        <repository>-->
+    <!--            <id>neo4j</id>-->
+    <!--            <url>http://m2.neo4j.org/content/repositories/releases/</url>-->
+    <!--            <releases>-->
+    <!--                <enabled>true</enabled>-->
+    <!--            </releases>-->
+    <!--&lt;!&ndash;        </repository>&ndash;&gt;-->
+    <!--    </repositories>-->
 </project>

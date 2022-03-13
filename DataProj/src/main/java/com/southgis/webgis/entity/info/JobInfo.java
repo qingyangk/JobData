@@ -11,14 +11,17 @@ import lombok.Data;
 @Data
 public class JobInfo {
 
+    public Integer id;
     public String company;
     public String position;
     public String region;
-    public String salary;
-    public String require;
+    public String salarySe;
+    public String education;
     public String experience;
-    public String type;
+    public String size;
     public String time;
+    public double x;
+    public double y;
 
 
 }

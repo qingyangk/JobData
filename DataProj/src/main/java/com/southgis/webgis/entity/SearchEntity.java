@@ -10,4 +10,7 @@ public class SearchEntity {
     public String model;
 
     public int pageNum;
+
+    @JsonProperty("pageSize")
+    public int count;
 }
