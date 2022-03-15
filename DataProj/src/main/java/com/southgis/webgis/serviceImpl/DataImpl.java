@@ -1,15 +1,18 @@
 package com.southgis.webgis.serviceImpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.Response.entity.EnumErrCode;
 import com.southgis.webgis.entity.*;
 import com.southgis.webgis.entity.info.*;
 import com.southgis.webgis.entity.table.DataDisEntity;
 import com.southgis.webgis.entity.table.DataEntity;
+import com.southgis.webgis.entity.table.JobEntity;
 import com.southgis.webgis.entity.table.OldEntity;
 import com.southgis.webgis.mapper.DataDisMapper;
 import com.southgis.webgis.mapper.DataMapper;
+import com.southgis.webgis.mapper.JobFormMapper;
 import com.southgis.webgis.mapper.OldMapper;
 import com.southgis.webgis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +43,9 @@ public class DataImpl implements DataService {
     //处理完的数据
     @Resource
     DataDisMapper dataDisMapper;
+
+    @Resource
+    JobFormMapper jobFormMapper;
 
     public ResponseInfo querySalary(CodeEntity model) {
 
@@ -85,60 +91,20 @@ public class DataImpl implements DataService {
      */
     public ResponseInfo queryForm(PageEntity model) {
         try {
-            List<DataEntity> jobEntity = dataMapper.selectList(null);
+            int pageNum = model.getPage();
+            int count = model.getCount();
+            Page<JobEntity> page = new Page<>(pageNum, count);
+            QueryWrapper<JobEntity> qw = new QueryWrapper<>();
+            Page<JobEntity> jobEntity = jobFormMapper.selectPage(page, qw);
 
-            //符合条件要素个数
-            int featureCount = jobEntity.size();
-            //要素最小值
-            int minCount = 0;
-            //要素最大值
-            int maxCount = featureCount;
-            //计数
-            int count = 0;
-            int pageSize = model.getCount();
-            int PageNum = model.page;
-            int pages;
-            if (maxCount > pageSize) {
-                if (maxCount % pageSize == 0) {
-                    pages = maxCount / pageSize;
-                } else {
-                    pages = maxCount / pageSize + 1;
-                }
-            } else {
-                pages = 1;
-            }
-            SearchInfo searchInfo = new SearchInfo();
-            searchInfo.setTotal(maxCount);
+            List<JobEntity> records = jobEntity.getRecords();
 
-            if (pageSize != 0 && PageNum != 0) {
-                minCount = (PageNum - 1) * pageSize;  //要素最小值
-                maxCount = PageNum * pageSize;  /* 要素最大值 */
-            }
+            SearchInfo formInfo = new SearchInfo();
+            formInfo.setJobInfos(records);
+            formInfo.setTotal(jobEntity.getTotal());
+            formInfo.setPages(jobEntity.getPages());
 
-            List<JobInfo> jobInfos = new ArrayList<>();
-
-            for (DataEntity entity : jobEntity) {
-                count++;
-                if (count > minCount && count <= maxCount) {
-                    JobInfo jobInfo = new JobInfo();
-                    jobInfo.company = entity.getCompany();
-                    jobInfo.experience = entity.getExperience();
-                    jobInfo.position = entity.getPosition();
-                    jobInfo.region = entity.getRegion();
-                    jobInfo.salarySe = entity.getSalarySe();
-                    jobInfo.education = entity.getEducation();
-                    jobInfo.time = entity.getTime();
-                    jobInfo.size = entity.getSize();
-                    jobInfo.id = entity.getId();
-                    jobInfo.x = entity.getX();
-                    jobInfo.y = entity.getY();
-                    jobInfos.add(jobInfo);
-                }
-            }
-
-            searchInfo.setJobInfos(jobInfos);
-            searchInfo.setPages(pages);
-            return new ResponseInfo(EnumErrCode.OK, searchInfo);
+            return new ResponseInfo(EnumErrCode.OK, formInfo);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
@@ -156,74 +122,26 @@ public class DataImpl implements DataService {
     public ResponseInfo queryAny(SearchEntity model) {
         String sql = model.getModel();
         try {
-            QueryWrapper<DataEntity> queryWrapper = new QueryWrapper<>();
-            //JobInfo jobInfo = new JobInfo();
+            int pageNum = model.getPageNum();
+            int count = model.getCount();
+
+            Page<JobEntity> page = new Page<>(pageNum, count);
+            QueryWrapper<JobEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.like("company", sql).or().like("position", sql)
                     .or().like("region", sql)
                     .or().like("salary", sql)
                     .or().like("type", sql)
                     .or().like("time", sql);
-            List<DataEntity> jobEntity = dataMapper.selectList(queryWrapper);
+            Page<JobEntity> jobEntity = jobFormMapper.selectPage(page, queryWrapper);
 
-            //符合条件要素个数
-            int featureCount = jobEntity.size();
-            //要素最小值
-            int minCount = 0;
-            //要素最大值
-            int maxCount = featureCount;
-            //计数
-            int count = 0;
-            int pageSize = model.getCount();
-            int PageNum = model.pageNum;
-            int pages;
-            if (maxCount > pageSize) {
-                if (maxCount % pageSize == 0) {
-                    pages = maxCount / pageSize;
-                } else {
-                    pages = maxCount / pageSize + 1;
-                }
-            } else {
-                pages = 1;
-            }
-            SearchInfo searchInfo = new SearchInfo();
-            searchInfo.setTotal(maxCount);
+            List<JobEntity> records = jobEntity.getRecords();
 
-            if (pageSize != 0 && PageNum != 0) {
-                minCount = (PageNum - 1) * pageSize;  //要素最小值
-                maxCount = PageNum * pageSize;  /* 要素最大值 */
-            }
+            SearchInfo formInfo = new SearchInfo();
+            formInfo.setJobInfos(records);
+            formInfo.setTotal(jobEntity.getTotal());
+            formInfo.setPages(jobEntity.getPages());
 
-
-//            Page<DataEntity> objectPage = new Page<>(model.getPageNum(), 8);
-//            Page<DataEntity> entityPage = dataMapper.selectPage(objectPage, queryWrapper);z
-//            Page<JobInfo> jobInfoPage = new Page<JobInfo>();
-
-            List<JobInfo> jobInfos = new ArrayList<>();
-            for (DataEntity entity : jobEntity) {
-                count++;
-                if (count > minCount && count <= maxCount) {
-                    JobInfo jobInfo = new JobInfo();
-                    jobInfo.setCompany(entity.getCompany());
-                    jobInfo.experience = entity.getExperience();
-                    jobInfo.setPosition(entity.getPosition());
-                    jobInfo.setRegion(entity.getRegion());
-                    jobInfo.setSalarySe(entity.getSalarySe());
-                    jobInfo.setEducation(entity.getEducation());
-                    jobInfo.setTime(entity.getTime());
-                    jobInfo.setSize(entity.getSize());
-                    jobInfo.id = entity.getId();
-                    jobInfo.x = entity.getX();
-                    jobInfo.y = entity.getY();
-                    jobInfos.add(jobInfo);
-                }
-                if (count > PageNum * pageSize)
-                    break;
-            }
-            searchInfo.setJobInfos(jobInfos);
-//            searchInfo.setTotal(maxCount); 此处需要提前赋值
-            searchInfo.setPages(pages);
-//            jobInfoPage.setRecords(jobInfos);
-            return new ResponseInfo(EnumErrCode.OK, searchInfo);
+            return new ResponseInfo(EnumErrCode.OK, formInfo);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());

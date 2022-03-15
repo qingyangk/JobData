@@ -14,7 +14,6 @@ public class MybatisPlusConfig {
     /**
      * mybatis-plus 分页插件
      */
-    // 最新版
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
