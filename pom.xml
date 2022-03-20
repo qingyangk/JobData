@@ -26,7 +26,6 @@
         <module>UserProj</module>
         <module>ResponseProj</module>
         <module>DataProj</module>
-        <module>AlgorithmProj</module>
         <module>AnswerProj</module>
     </modules>
 

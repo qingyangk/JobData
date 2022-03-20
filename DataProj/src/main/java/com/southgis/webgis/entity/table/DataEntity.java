@@ -27,8 +27,8 @@ public class DataEntity {
 
     public String time;
 
-    @TableField("avg_salary")
-    public String salary;
+    @TableField("avgsalary")
+    public double salary;
 
     public double x;
 

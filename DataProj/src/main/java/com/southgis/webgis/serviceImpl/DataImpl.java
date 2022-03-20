@@ -6,14 +6,8 @@ import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.Response.entity.EnumErrCode;
 import com.southgis.webgis.entity.*;
 import com.southgis.webgis.entity.info.*;
-import com.southgis.webgis.entity.table.DataDisEntity;
-import com.southgis.webgis.entity.table.DataEntity;
-import com.southgis.webgis.entity.table.JobEntity;
-import com.southgis.webgis.entity.table.OldEntity;
-import com.southgis.webgis.mapper.DataDisMapper;
-import com.southgis.webgis.mapper.DataMapper;
-import com.southgis.webgis.mapper.JobFormMapper;
-import com.southgis.webgis.mapper.OldMapper;
+import com.southgis.webgis.entity.table.*;
+import com.southgis.webgis.mapper.*;
 import com.southgis.webgis.service.DataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据提取接口
@@ -47,19 +42,11 @@ public class DataImpl implements DataService {
     @Resource
     JobFormMapper jobFormMapper;
 
+    @Resource
+    JobMapper jobMapper;
+
     public ResponseInfo querySalary(CodeEntity model) {
-
         try {
-//            此处使用jieba分词，此部分在python中完成
-//            JiebaSegmenter segmenter = new JiebaSegmenter();
-//            String field = "position";
-//            List<String> text = getValue(field);
-//            List<String> jieba = new ArrayList<>();
-//            for (String sentence : text) {
-//                List<SegToken> tokens = segmenter.process(sentence, JiebaSegmenter.SegMode.INDEX);
-//                System.out.println(tokens);
-//            }
-
             int[] value = new int[10];
             String[] position = new String[10];
             DataInfo data = new DataInfo();
@@ -317,6 +304,9 @@ public class DataImpl implements DataService {
         }
     }
 
+    /**
+     * 以id查询该公司的所有信息
+     */
     public ResponseInfo queryAll(CodeEntity code) {
         try {
             QueryWrapper<DataEntity> qw = new QueryWrapper<>();
@@ -324,6 +314,56 @@ public class DataImpl implements DataService {
             List<DataEntity> dataEntities = dataMapper.selectList(qw);
 
             return new ResponseInfo(EnumErrCode.OK, dataEntities);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
+        }
+    }
+
+    /**
+     * 处理数据
+     */
+    public ResponseInfo disData(CodeEntity code) {
+        try {
+
+            if (code.getCode() == 1) {
+                //城市列表
+                List<Map<String, Object>> citys = jobMapper.cList();
+                int id = 1;
+                for (Map<String, Object> cr : citys) {
+                    String city = (String) cr.get("city");
+                    QueryWrapper<DataEntity> qw = new QueryWrapper<>();
+                    qw.eq("city", city);
+                    List<DataEntity> jobEntities = dataMapper.selectList(qw);
+                    if (jobEntities.size() == 0) {
+                        continue;
+                    }
+                    int count = 0;
+                    double salary = 0;
+                    for (DataEntity en : jobEntities) {
+                        salary += en.getSalary();
+                        count++;
+                    }
+                    double avgAalary = salary / count;
+                    //插入至新表
+                    jobMapper.inCS(city, avgAalary);
+                }
+            }
+            return new ResponseInfo(EnumErrCode.OK, null);
+        } catch (Exception ex) {
+            log.error(ex.getMessage());
+            return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());
+        }
+    }
+
+    /**
+     * 查询区县薪资
+     */
+    public ResponseInfo querySa(Interface model) {
+        try {
+            String city = model.getCity();
+            List<RegionJob> regionJobs = jobMapper.regionS(city);
+            return new ResponseInfo(EnumErrCode.OK, regionJobs);
         } catch (Exception ex) {
             log.error(ex.getMessage());
             return new ResponseInfo(EnumErrCode.CommonError, ex.getMessage());

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.southgis.webgis.mapper.JobMapper">
+
+    <select id="cList" resultType="map">
+        select distinct city
+        from jobdata
+    </select>
+
+    <select id="avgSalary" resultType="com.southgis.webgis.entity.table.DataEntity">
+        select city, avgsalary
+        from jobdata
+        where city = #{city}
+    </select>
+
+    <insert id="inCS" parameterType="com.southgis.webgis.entity.table.CityJob">
+        insert into cityjob(city, avgsalary)
+        values (#{city}, #{avgsalary})
+    </insert>
+
+    <select id="regionS" resultType="com.southgis.webgis.entity.table.RegionJob">
+        select *
+        from regionjob
+        where city = #{city}
+        order by avgsalary
+        limit 0,10
+    </select>
+</mapper>

@@ -28,12 +28,10 @@ public class JobEntity {
 
     public double y;
 
-//    public String treat;
-
     public String education;
 
     public String size;
 
     @TableField("salary")
-    public String salarySe;
+    public double salarySe;
 }

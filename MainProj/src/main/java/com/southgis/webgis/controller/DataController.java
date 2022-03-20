@@ -2,6 +2,7 @@ package com.southgis.webgis.controller;
 
 import com.southgis.webgis.Response.ResponseInfo;
 import com.southgis.webgis.entity.CodeEntity;
+import com.southgis.webgis.entity.Interface;
 import com.southgis.webgis.entity.PageEntity;
 import com.southgis.webgis.entity.SearchEntity;
 import com.southgis.webgis.service.DataService;
@@ -107,11 +108,28 @@ public class DataController {
 
     /**
      * 依据id查询该职位的所有信息
+     *
      * @param code
      * @return
      */
     @PostMapping("queryAll")
     public ResponseInfo queryAll(@RequestBody CodeEntity code) {
         return dataService.queryAll(code);
+    }
+
+    /**
+     * 处理数据
+     *
+     * @param code
+     * @return
+     */
+    @PostMapping("disData")
+    public ResponseInfo disData(@RequestBody CodeEntity code) {
+        return dataService.disData(code);
+    }
+
+    @PostMapping("querySa")
+    public ResponseInfo querySa(@RequestBody Interface model) {
+        return dataService.querySa(model);
     }
 }
